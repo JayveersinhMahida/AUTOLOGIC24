@@ -119,8 +119,12 @@ class _LoginScreenState extends State<LoginScreen> {
                             } else {
                               setState(() {
                                 _loading = false;
-                                Navigator.pushReplacement(context,
-                                    MaterialPageRoute(builder: (_) => Home()));
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (_) => Home(
+                                              id: data.id!,
+                                            )));
                               });
                             }
                           }
@@ -134,8 +138,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(Colors.red),
                       padding: MaterialStateProperty.all(EdgeInsets.only(
-                        left: 105.0,
-                        right: 105.0,
+                        left: 60.0,
+                        right: 60.0,
                         top: 20.0,
                         bottom: 20.0,
                       ))),

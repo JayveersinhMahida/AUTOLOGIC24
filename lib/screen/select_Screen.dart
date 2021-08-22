@@ -1,7 +1,9 @@
 import 'package:autologic/constants/constants.dart';
 import 'package:autologic/models/Vmodel.dart';
 import 'package:autologic/models/brandmodel.dart';
+import 'package:autologic/models/savedataModel.dart';
 import 'package:autologic/screen/MapScreen.dart';
+import 'package:autologic/screen/ServiceScreen/ServicesScreen.dart';
 import 'package:autologic/services/Apiservices.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -9,14 +11,20 @@ import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 
 class Home extends StatefulWidget {
+  final String id;
+
+  const Home({Key? key, required this.id}) : super(key: key);
   @override
   _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
   String _selectedvalue = "Hero";
-  late String _id;
+  late String _id = "1";
   String _selectModel = "Hero Splendor Plus+";
+  String _kmtokm = "0 - 3000km";
+  String _timepick = "9:00am - 12:00pm";
+  String _servicePrice = "";
   int def = 0;
   int def2 = 0;
   String _pick = "Pick Up Date";
@@ -25,6 +33,12 @@ class _HomeState extends State<Home> {
   List<Record>? brand;
   ModelData? modelData;
   List<Vehiclemodel>? vehiclemodel;
+
+  DateTime selectedDate = DateTime.now();
+  DateTime endDate = DateTime.now().add(Duration(days: 15));
+  DateTime? date;
+
+  TextEditingController vehicleNo = TextEditingController();
   ///////
   @override
   void initState() {
@@ -38,6 +52,9 @@ class _HomeState extends State<Home> {
     brand = data!.records;
 
     print(data!.records![0].vehicleBrand);
+    getModel();
+
+    print(selectedDate);
     setState(() {
       _loading = false;
     });
@@ -55,9 +72,6 @@ class _HomeState extends State<Home> {
   ///
   ///
   ///
-  DateTime selectedDate = DateTime.now();
-  DateTime endDate = DateTime.now().add(Duration(days: 15));
-  DateTime? date;
 
   ///
   Future _selectDate(BuildContext context) async {
@@ -69,6 +83,7 @@ class _HomeState extends State<Home> {
     if (picked != null && picked != selectedDate)
       setState(() {
         selectedDate = picked;
+
         // print(picked.timeZoneName);
       });
     return picked;
@@ -90,10 +105,10 @@ class _HomeState extends State<Home> {
               width: 100,
               height: 100.0,
             ),
-            // Image.asset(
-            //   logo,
-            //   scale: 18.0,
-            // ),
+            Image.asset(
+              logo,
+              scale: 18.0,
+            ),
             Spacer(),
             Text(
               "Booking Service",
@@ -108,7 +123,7 @@ class _HomeState extends State<Home> {
         centerTitle: true,
       ),
       body: _loading
-          ? loading
+          ? Center(child: loading)
           : SingleChildScrollView(
               child: Container(
                 padding: const EdgeInsets.all(10.0),
@@ -208,6 +223,9 @@ class _HomeState extends State<Home> {
                                 onTap: () {
                                   setState(() {
                                     _selectModel = item.vehicleModel.toString();
+                                    _servicePrice =
+                                        item.servicePrice.toString();
+                                    print(_servicePrice);
                                   });
                                 },
                                 child: Text(item.vehicleModel.toString()),
@@ -236,6 +254,7 @@ class _HomeState extends State<Home> {
                             shrinkWrap: true,
                             itemCount: km.length,
                             itemBuilder: (context, index) {
+                              final kmto = km[index];
                               // return Text("km");
                               return Padding(
                                 padding: const EdgeInsets.all(8.0),
@@ -254,12 +273,14 @@ class _HomeState extends State<Home> {
                                     // fontWeight: FontWeight.bold,
                                   ),
                                   label: Text(
-                                    km[index],
+                                    kmto,
                                   ),
                                   selected: def == index,
                                   onSelected: (value) {
                                     setState(() {
                                       def = value ? index : def;
+                                      _kmtokm = kmto;
+                                      print(_kmtokm);
                                     });
                                   },
                                 ),
@@ -284,9 +305,11 @@ class _HomeState extends State<Home> {
                     Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: TextField(
+                        controller: vehicleNo,
                         decoration: InputDecoration(
-                            hintText: "GJ 23 XX 0000",
-                            border: OutlineInputBorder()),
+                          hintText: "GJ 23 XX 0000",
+                          border: OutlineInputBorder(),
+                        ),
                       ),
                     ),
                     const SizedBox(
@@ -320,6 +343,7 @@ class _HomeState extends State<Home> {
                           onPressed: () async {
                             DateTime date = await _selectDate(context);
                             var pick = DateFormat("dd-MM-yyyy").format(date);
+
                             print(_pick);
                             setState(() {
                               _pick = pick;
@@ -345,6 +369,7 @@ class _HomeState extends State<Home> {
                             shrinkWrap: true,
                             itemCount: times.length,
                             itemBuilder: (context, index) {
+                              final timeto = times[index];
                               // return Text("km");
                               return Padding(
                                 padding: const EdgeInsets.all(8.0),
@@ -363,7 +388,7 @@ class _HomeState extends State<Home> {
                                     // fontWeight: FontWeight.bold,
                                   ),
                                   label: Text(
-                                    times[index],
+                                    timeto,
                                     // style: TextStyle(
                                     //   color: Colors.black,
                                     //   fontSize: 18.0,
@@ -374,6 +399,8 @@ class _HomeState extends State<Home> {
                                   onSelected: (value) {
                                     setState(() {
                                       def2 = value ? index : def;
+                                      _timepick = timeto;
+                                      print(_timepick);
                                     });
                                   },
                                 ),
@@ -381,13 +408,29 @@ class _HomeState extends State<Home> {
                             }),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20.0,
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (ctx) => MapScreen()));
+                        final data = SaveData(
+                          id: widget.id,
+                          brand: _selectedvalue,
+                          km: _kmtokm,
+                          model: _selectModel,
+                          pickDate: _pick,
+                          pickTime: _timepick,
+                          vehicleNumber: vehicleNo.text,
+                        );
+
+                        print(
+                            "${data.brand + data.km + data.model + data.pickDate + data.pickTime + data.vehicleNumber + data.brand}");
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => MapScreen(
+                                      data: data,
+                                    )));
                       },
                       child: Text(
                         "Save",

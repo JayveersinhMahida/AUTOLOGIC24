@@ -1,10 +1,13 @@
+import 'package:autologic/models/savedataModel.dart';
+import 'package:autologic/screen/ServiceScreen/ServicesScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geocoding/geocoding.dart';
 
 class MapScreen extends StatefulWidget {
-  const MapScreen({Key? key}) : super(key: key);
+  final SaveData data;
+  const MapScreen({Key? key, required this.data}) : super(key: key);
 
   @override
   _MapScreenState createState() => _MapScreenState();
@@ -62,7 +65,7 @@ class _MapScreenState extends State<MapScreen> {
     print(pp.longitude);
 
     placemarks = await placemarkFromCoordinates(pp.latitude, pp.longitude);
-    print(placemarks[0].locality);
+    print(placemarks.toString());
     setState(() {
       po = pp;
       _loading = false;
@@ -90,8 +93,10 @@ class _MapScreenState extends State<MapScreen> {
         padding: const EdgeInsets.all(8.0),
         child: ElevatedButton(
           onPressed: () {
-            // Navigator.push(context,
-            //     MaterialPageRoute(builder: (ctx) => MapScreen()));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (ctx) => ServicesScreen(data: widget.data)));
           },
           child: Text(
             "Save",
@@ -136,19 +141,11 @@ class _MapScreenState extends State<MapScreen> {
                     child: Column(
                       children: [
                         Text(
-                          placemarks[0].administrativeArea.toString(),
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                        Text(
-                          placemarks[0].name.toString(),
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                        Text(
-                          placemarks[0].subLocality.toString(),
+                          placemarks[0].administrativeArea.toString() +
+                              placemarks[0].name.toString() +
+                              placemarks[0].subLocality.toString() +
+                              placemarks[0].subThoroughfare.toString() +
+                              placemarks[0].postalCode.toString(),
                           style: TextStyle(
                             color: Colors.white,
                           ),

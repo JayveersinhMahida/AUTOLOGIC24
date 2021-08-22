@@ -1,4 +1,6 @@
+import 'package:autologic/constants/constants.dart';
 import 'package:autologic/screen/login/login.dart';
+import 'package:autologic/screen/select_Screen.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
@@ -22,9 +24,24 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.yellow,
       body: Container(
-        child: Center(
-          child: Lottie.asset("assets/bikejson.json"),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Image.asset(
+              logo,
+              height: 350,
+              width: 350,
+            ),
+            LottieBuilder.asset(
+              "assets/bikejson.json",
+              repeat: false,
+            ),
+            SizedBox(
+              height: 50,
+            )
+          ],
         ),
       ),
     );
