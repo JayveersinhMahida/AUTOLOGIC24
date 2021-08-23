@@ -38,3 +38,5 @@ const String logo = "assets/logo.png";
 const Widget loading = CircularProgressIndicator();
 
 enum IsMoving { yes, no }
+
+const String rupee = "₹";

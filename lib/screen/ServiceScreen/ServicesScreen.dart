@@ -436,7 +436,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                   ),
                 ),
                 const SizedBox(
-                  height: 10,
+                  height: 1.0,
                 ),
                 Container(
                   height: 120,
@@ -457,7 +457,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                               ),
                             ),
                             Text(
-                              "699.0",
+                              rupee + widget.data.price,
                               style: TextStyle(
                                 color: Colors.green,
                                 fontWeight: FontWeight.bold,

@@ -127,9 +127,10 @@ class _MapScreenState extends State<MapScreen> {
                       po.latitude,
                       po.longitude,
                     ),
-                    zoom: 18.4746,
+                    zoom: 14.4746,
                   ),
                   myLocationEnabled: true,
+                  mapType: MapType.hybrid,
                 ),
                 Positioned(
                   left: 50.0,
@@ -145,7 +146,8 @@ class _MapScreenState extends State<MapScreen> {
                               placemarks[0].name.toString() +
                               placemarks[0].subLocality.toString() +
                               placemarks[0].subThoroughfare.toString() +
-                              placemarks[0].postalCode.toString(),
+                              placemarks[0].postalCode.toString() +
+                              placemarks[0].street.toString(),
                           style: TextStyle(
                             color: Colors.white,
                           ),

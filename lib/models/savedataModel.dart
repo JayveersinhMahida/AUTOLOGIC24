@@ -2,6 +2,7 @@ class SaveData {
   SaveData(
       {required this.brand,
       required this.km,
+      required this.price,
       required this.model,
       required this.pickDate,
       required this.pickTime,
@@ -14,4 +15,5 @@ class SaveData {
   String pickDate;
   String pickTime;
   String id;
+  String price;
 }

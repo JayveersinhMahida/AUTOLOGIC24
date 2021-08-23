@@ -415,6 +415,7 @@ class _HomeState extends State<Home> {
                       onPressed: () {
                         final data = SaveData(
                           id: widget.id,
+                          price: _servicePrice,
                           brand: _selectedvalue,
                           km: _kmtokm,
                           model: _selectModel,
