@@ -154,16 +154,72 @@ class _ServicesScreenState extends State<ServicesScreen> {
                   children: [
                     Container(
                       height: 40,
-                      width: 200,
-                      color: Colors.red,
+                      width: 150,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text("Inspect Brack"),
+                            const SizedBox(
+                              height: 10.0,
+                            ),
+                            const Text("Inspect Fuel"),
+                            const SizedBox(
+                              height: 10.0,
+                            ),
+                            const Text("Inspect Fuel"),
+                            const SizedBox(
+                              height: 10.0,
+                            ),
+                            const Text("Inspect Fuel"),
+                            const SizedBox(
+                              height: 10.0,
+                            ),
+                            const Text("Inspect Fuel"),
+                            const SizedBox(
+                              height: 10.0,
+                            ),
+                            const Text("Inspect Fuel"),
+                          ],
+                        ),
+                      ),
                     ),
                     SizedBox(
                       width: 10.0,
                     ),
                     Container(
                       height: 40,
-                      width: 200,
-                      color: Colors.red,
+                      width: 150,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text("Inspect Brack"),
+                            const SizedBox(
+                              height: 10.0,
+                            ),
+                            const Text("Inspect Fuel"),
+                            const SizedBox(
+                              height: 10.0,
+                            ),
+                            const Text("Inspect Fuel"),
+                            const SizedBox(
+                              height: 10.0,
+                            ),
+                            const Text("Inspect Fuel"),
+                            const SizedBox(
+                              height: 10.0,
+                            ),
+                            const Text("Inspect Fuel"),
+                            const SizedBox(
+                              height: 10.0,
+                            ),
+                            const Text("Inspect Fuel"),
+                          ],
+                        ),
+                      ),
                     ),
                   ],
                 ),
