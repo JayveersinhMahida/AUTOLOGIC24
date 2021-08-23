@@ -36,3 +36,5 @@ const List times = [
 const String logo = "assets/logo.png";
 
 const Widget loading = CircularProgressIndicator();
+
+enum IsMoving { yes, no }
