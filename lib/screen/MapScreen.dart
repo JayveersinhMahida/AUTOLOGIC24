@@ -130,7 +130,7 @@ class _MapScreenState extends State<MapScreen> {
                     zoom: 14.4746,
                   ),
                   myLocationEnabled: true,
-                  mapType: MapType.hybrid,
+                  // mapType: MapType.hybrid,
                 ),
                 Positioned(
                   left: 50.0,
@@ -142,28 +142,23 @@ class _MapScreenState extends State<MapScreen> {
                     child: Column(
                       children: [
                         Text(
-                          placemarks[0].administrativeArea.toString() +
-                              placemarks[0].name.toString() +
-                              placemarks[0].subLocality.toString() +
-                              placemarks[0].subThoroughfare.toString() +
-                              placemarks[0].postalCode.toString() +
-                              placemarks[0].street.toString(),
+                          "Street:- ${placemarks[0].street}",
                           style: TextStyle(
                             color: Colors.white,
                           ),
                         ),
                         Text(
-                          placemarks[0].subThoroughfare.toString(),
+                          "Area:- ${placemarks[0].name}, ${placemarks[0].subLocality}",
                           style: TextStyle(
                             color: Colors.white,
                           ),
                         ),
                         Text(
-                          placemarks[0].postalCode.toString(),
+                          "Dist:- ${placemarks[0].thoroughfare} , ${placemarks[0].locality} , pincode :- ${placemarks[0].postalCode}, ${placemarks[0].administrativeArea}",
                           style: TextStyle(
                             color: Colors.black,
                           ),
-                        )
+                        ),
                       ],
                     ),
                   ),
