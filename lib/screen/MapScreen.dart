@@ -82,6 +82,9 @@ class _MapScreenState extends State<MapScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
+        iconTheme: IconThemeData(
+          color: Colors.black, //change your color here
+        ),
         title: Text(
           "Loction",
           style: TextStyle(color: Colors.black),
@@ -127,7 +130,7 @@ class _MapScreenState extends State<MapScreen> {
                       po.latitude,
                       po.longitude,
                     ),
-                    zoom: 14.4746,
+                    zoom: 15.4746,
                   ),
                   myLocationEnabled: true,
                   // mapType: MapType.hybrid,
@@ -140,6 +143,8 @@ class _MapScreenState extends State<MapScreen> {
                     width: 250,
                     color: Colors.black,
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
                           "Street:- ${placemarks[0].street}",
@@ -156,7 +161,7 @@ class _MapScreenState extends State<MapScreen> {
                         Text(
                           "Dist:- ${placemarks[0].thoroughfare} , ${placemarks[0].locality} , pincode :- ${placemarks[0].postalCode}, ${placemarks[0].administrativeArea}",
                           style: TextStyle(
-                            color: Colors.black,
+                            color: Colors.white,
                           ),
                         ),
                       ],

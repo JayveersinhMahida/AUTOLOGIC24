@@ -27,7 +27,7 @@ class _HomeState extends State<Home> {
   String _servicePrice = "";
   int def = 0;
   int def2 = 0;
-  String _pick = "Pick Up Date";
+  String _pick = "Service Date";
   BrandData? data;
   late bool _loading;
   List<Record>? brand;
@@ -39,6 +39,8 @@ class _HomeState extends State<Home> {
   DateTime? date;
 
   TextEditingController vehicleNo = TextEditingController();
+
+  final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
   ///////
   @override
   void initState() {
@@ -105,10 +107,6 @@ class _HomeState extends State<Home> {
               width: 100,
               height: 100.0,
             ),
-            Image.asset(
-              logo,
-              scale: 18.0,
-            ),
             Spacer(),
             Text(
               "Booking Service",
@@ -127,331 +125,347 @@ class _HomeState extends State<Home> {
           : SingleChildScrollView(
               child: Container(
                 padding: const EdgeInsets.all(10.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  // crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const SizedBox(
-                      height: 10.0,
-                    ),
-                    Text(
-                      " Select Your Vehicle Brand",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20.0,
-                        // fontWeight: FontWeight.bold,
+                child: Form(
+                  key: _formkey,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    // crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const SizedBox(
+                        height: 10.0,
                       ),
-                    ),
-                    const SizedBox(
-                      height: 20.0,
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 2),
-                      decoration: BoxDecoration(
-                        // color: Colors.black87,
+                      Text(
+                        " Select Your Vehicle Brand",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 20.0,
+                          // fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20.0,
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 2),
+                        decoration: BoxDecoration(
+                          // color: Colors.black87,
 
-                        border: Border.all(color: Colors.black),
-                        borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: Colors.black),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: DropdownButtonHideUnderline(
+                          child: ButtonTheme(
+                            alignedDropdown: true,
+                            child: DropdownButton<String>(
+                              isExpanded: true,
+                              value: _selectedvalue,
+                              items: brand?.map((b) {
+                                return DropdownMenuItem(
+                                    value: b.vehicleBrand.toString(),
+                                    onTap: () {
+                                      setState(() {
+                                        _selectedvalue = b.vehicleBrand!;
+                                        print("aa $_selectedvalue");
+                                        _id = b.id!;
+                                        // _selectModel = "";
+                                      });
+                                    },
+                                    child: Text(b.vehicleBrand!.toString()));
+                              }).toList(),
+                              hint: const Text("Select Your Brand"),
+                              onChanged: (value) {
+                                setState(() {
+                                  _selectedvalue = value.toString();
+                                  print(_selectedvalue);
+                                  // _id = value.toString();
+                                  getModel();
+                                });
+                              },
+                              // value: _selectedvalue,
+                            ),
+                          ),
+                        ),
                       ),
-                      child: DropdownButtonHideUnderline(
-                        child: ButtonTheme(
-                          alignedDropdown: true,
-                          child: DropdownButton<String>(
-                            isExpanded: true,
-                            value: _selectedvalue,
-                            items: brand?.map((b) {
-                              return DropdownMenuItem(
-                                  value: b.vehicleBrand.toString(),
+                      const SizedBox(
+                        height: 20.0,
+                      ),
+                      Text(
+                        "Select Your Vehicle Model",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 20.0,
+                          // fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20.0,
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 2),
+                        decoration: BoxDecoration(
+                          // color: Colors.black87,
+
+                          border: Border.all(color: Colors.black),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: DropdownButtonHideUnderline(
+                          child: ButtonTheme(
+                            alignedDropdown: true,
+                            child: DropdownButton(
+                              // disabledHint: Text("Select Your Model"),
+                              isExpanded: true,
+                              value: _selectModel,
+                              items: vehiclemodel?.map((item) {
+                                return DropdownMenuItem(
+                                  value: item.vehicleModel,
                                   onTap: () {
                                     setState(() {
-                                      _selectedvalue = b.vehicleBrand!;
-                                      print("aa $_selectedvalue");
-                                      _id = b.id!;
-                                      // _selectModel = "";
+                                      _selectModel =
+                                          item.vehicleModel.toString();
+                                      _servicePrice =
+                                          item.servicePrice.toString();
+                                      print(_servicePrice);
                                     });
                                   },
-                                  child: Text(b.vehicleBrand!.toString()));
-                            }).toList(),
-                            hint: const Text("Select Your Brand"),
-                            onChanged: (value) {
-                              setState(() {
-                                _selectedvalue = value.toString();
-                                print(_selectedvalue);
-                                // _id = value.toString();
-                                getModel();
-                              });
-                            },
-                            // value: _selectedvalue,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 20.0,
-                    ),
-                    Text(
-                      "Select Your Vehicle Model",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20.0,
-                        // fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 20.0,
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 2),
-                      decoration: BoxDecoration(
-                        // color: Colors.black87,
-
-                        border: Border.all(color: Colors.black),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: DropdownButtonHideUnderline(
-                        child: ButtonTheme(
-                          alignedDropdown: true,
-                          child: DropdownButton(
-                            // disabledHint: Text("Select Your Model"),
-                            isExpanded: true,
-                            value: _selectModel,
-                            items: vehiclemodel?.map((item) {
-                              return DropdownMenuItem(
-                                value: item.vehicleModel,
-                                onTap: () {
-                                  setState(() {
-                                    _selectModel = item.vehicleModel.toString();
-                                    _servicePrice =
-                                        item.servicePrice.toString();
-                                    print(_servicePrice);
-                                  });
-                                },
-                                child: Text(item.vehicleModel.toString()),
-                              );
-                            }).toList(),
-                            hint: const Text("Select Your Model"),
-                            onChanged: (value) {
-                              setState(() {
-                                _selectModel = value.toString();
-                              });
-                            },
-                            // value: _selectModel,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 25.0,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        height: 50.0,
-                        child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            shrinkWrap: true,
-                            itemCount: km.length,
-                            itemBuilder: (context, index) {
-                              final kmto = km[index];
-                              // return Text("km");
-                              return Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: ChoiceChip(
-                                  elevation: 1.0,
-                                  // disabledColor: Colors.blue,
-                                  selectedColor: Colors.yellowAccent,
-                                  // padding: const EdgeInsets.symmetric(
-                                  //   horizontal: 10.0,
-                                  //   vertical: 10.0,
-                                  // ),
-                                  pressElevation: 0.0,
-                                  labelStyle: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 18.0,
-                                    // fontWeight: FontWeight.bold,
-                                  ),
-                                  label: Text(
-                                    kmto,
-                                  ),
-                                  selected: def == index,
-                                  onSelected: (value) {
-                                    setState(() {
-                                      def = value ? index : def;
-                                      _kmtokm = kmto;
-                                      print(_kmtokm);
-                                    });
-                                  },
-                                ),
-                              );
-                            }),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 15.0,
-                    ),
-                    const Text(
-                      "Enter Your Vehicle Number ",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20.0,
-                        // fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10.0,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: TextField(
-                        controller: vehicleNo,
-                        decoration: InputDecoration(
-                          hintText: "GJ 23 XX 0000",
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 15.0,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Text(
-                          _pick,
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 20.0,
-                            // fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        ElevatedButton.icon(
-                          style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all(Colors.yellowAccent),
-                            padding: MaterialStateProperty.all(
-                              EdgeInsets.symmetric(
-                                  horizontal: 55.0, vertical: 10.0),
+                                  child: Text(item.vehicleModel.toString()),
+                                );
+                              }).toList(),
+                              hint: const Text("Select Your Model"),
+                              onChanged: (value) {
+                                setState(() {
+                                  _selectModel = value.toString();
+                                });
+                              },
+                              // value: _selectModel,
                             ),
-                            shape: MaterialStateProperty.all(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20.0),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 25.0,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          height: 50.0,
+                          child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              shrinkWrap: true,
+                              itemCount: km.length,
+                              itemBuilder: (context, index) {
+                                final kmto = km[index];
+                                // return Text("km");
+                                return Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: ChoiceChip(
+                                    elevation: 1.0,
+                                    // disabledColor: Colors.blue,
+                                    selectedColor: Colors.yellowAccent,
+                                    // padding: const EdgeInsets.symmetric(
+                                    //   horizontal: 10.0,
+                                    //   vertical: 10.0,
+                                    // ),
+                                    pressElevation: 0.0,
+                                    labelStyle: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 18.0,
+                                      // fontWeight: FontWeight.bold,
+                                    ),
+                                    label: Text(
+                                      kmto,
+                                    ),
+                                    selected: def == index,
+                                    onSelected: (value) {
+                                      setState(() {
+                                        def = value ? index : def;
+                                        _kmtokm = kmto;
+                                        print(_kmtokm);
+                                      });
+                                    },
+                                  ),
+                                );
+                              }),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 15.0,
+                      ),
+                      const Text(
+                        "Enter Your Vehicle Number ",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 20.0,
+                          // fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10.0,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: TextFormField(
+                          validator: (String? value) {
+                            if (value == null || value.isEmpty) {
+                              return "Enter Vehicle Number";
+                            }
+                            return null;
+                          },
+                          textCapitalization: TextCapitalization.characters,
+                          controller: vehicleNo,
+                          decoration: InputDecoration(
+                            hintText: "GJ 23 XX 0000",
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 15.0,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Text(
+                            _pick,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 20.0,
+                              // fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          ElevatedButton.icon(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all(
+                                  Colors.yellowAccent),
+                              padding: MaterialStateProperty.all(
+                                EdgeInsets.symmetric(
+                                    horizontal: 55.0, vertical: 10.0),
+                              ),
+                              shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                ),
                               ),
                             ),
-                          ),
-                          onPressed: () async {
-                            DateTime date = await _selectDate(context);
-                            var pick = DateFormat("dd-MM-yyyy").format(date);
+                            onPressed: () async {
+                              DateTime date = await _selectDate(context);
+                              var pick = DateFormat("dd-MM-yyyy").format(date);
 
-                            print(_pick);
-                            setState(() {
-                              _pick = pick;
-                            });
-                          },
-                          icon: const Icon(
-                            Icons.calendar_today,
-                            color: Colors.black,
+                              print(_pick);
+                              setState(() {
+                                _pick = pick;
+                              });
+                            },
+                            icon: const Icon(
+                              Icons.calendar_today,
+                              color: Colors.black,
+                            ),
+                            label: const Text(
+                              "Date",
+                              style: TextStyle(color: Colors.black),
+                            ),
                           ),
-                          label: const Text(
-                            "Date",
-                            style: TextStyle(color: Colors.black),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        height: 50.0,
-                        child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            shrinkWrap: true,
-                            itemCount: times.length,
-                            itemBuilder: (context, index) {
-                              final timeto = times[index];
-                              // return Text("km");
-                              return Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: ChoiceChip(
-                                  elevation: 1.0,
-                                  // disabledColor: Colors.blue,
-                                  selectedColor: Colors.yellowAccent,
-                                  // padding: const EdgeInsets.symmetric(
-                                  //   horizontal: 10.0,
-                                  //   vertical: 10.0,
-                                  // ),
-                                  pressElevation: 0.0,
-                                  labelStyle: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 18.0,
-                                    // fontWeight: FontWeight.bold,
-                                  ),
-                                  label: Text(
-                                    timeto,
-                                    // style: TextStyle(
-                                    //   color: Colors.black,
-                                    //   fontSize: 18.0,
-                                    //   fontWeight: FontWeight.w600,
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          height: 50.0,
+                          child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              shrinkWrap: true,
+                              itemCount: times.length,
+                              itemBuilder: (context, index) {
+                                final timeto = times[index];
+                                // return Text("km");
+                                return Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: ChoiceChip(
+                                    elevation: 1.0,
+                                    // disabledColor: Colors.blue,
+                                    selectedColor: Colors.yellowAccent,
+                                    // padding: const EdgeInsets.symmetric(
+                                    //   horizontal: 10.0,
+                                    //   vertical: 10.0,
                                     // ),
+                                    pressElevation: 0.0,
+                                    labelStyle: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 18.0,
+                                      // fontWeight: FontWeight.bold,
+                                    ),
+                                    label: Text(
+                                      timeto,
+                                      // style: TextStyle(
+                                      //   color: Colors.black,
+                                      //   fontSize: 18.0,
+                                      //   fontWeight: FontWeight.w600,
+                                      // ),
+                                    ),
+                                    selected: def2 == index,
+                                    onSelected: (value) {
+                                      setState(() {
+                                        def2 = value ? index : def;
+                                        _timepick = timeto;
+                                        print(_timepick);
+                                      });
+                                    },
                                   ),
-                                  selected: def2 == index,
-                                  onSelected: (value) {
-                                    setState(() {
-                                      def2 = value ? index : def;
-                                      _timepick = timeto;
-                                      print(_timepick);
-                                    });
-                                  },
-                                ),
-                              );
-                            }),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 20.0,
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        final data = SaveData(
-                          id: widget.id,
-                          price: _servicePrice,
-                          brand: _selectedvalue,
-                          km: _kmtokm,
-                          model: _selectModel,
-                          pickDate: _pick,
-                          pickTime: _timepick,
-                          vehicleNumber: vehicleNo.text,
-                        );
-
-                        print(
-                            "${data.brand + data.km + data.model + data.pickDate + data.pickTime + data.vehicleNumber + data.brand}");
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (_) => MapScreen(
-                                      data: data,
-                                    )));
-                      },
-                      child: Text(
-                        "Save",
-                        style: TextStyle(color: Colors.black, fontSize: 25.0),
-                      ),
-                      style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all(Colors.yellowAccent),
-                        padding: MaterialStateProperty.all(
-                          EdgeInsets.symmetric(
-                              horizontal: 85.0, vertical: 10.0),
+                                );
+                              }),
                         ),
-                        shape: MaterialStateProperty.all(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20.0),
+                      ),
+                      const SizedBox(
+                        height: 20.0,
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          if (_formkey.currentState!.validate() &&
+                              _pick != "Service Date") {
+                            final data = SaveData(
+                              id: widget.id,
+                              price: _servicePrice,
+                              brand: _selectedvalue,
+                              km: _kmtokm,
+                              model: _selectModel,
+                              pickDate: _pick,
+                              pickTime: _timepick,
+                              vehicleNumber: vehicleNo.text,
+                            );
+                            print(
+                                "${data.brand + data.km + data.model + data.pickDate + data.pickTime + data.vehicleNumber + data.brand}");
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) => MapScreen(
+                                          data: data,
+                                        )));
+                          } else if (_pick == "Service Date") {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: Text("Please pick Service Date")));
+                          }
+                        },
+                        child: Text(
+                          "Next",
+                          style: TextStyle(color: Colors.black, fontSize: 25.0),
+                        ),
+                        style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.yellowAccent),
+                          padding: MaterialStateProperty.all(
+                            EdgeInsets.symmetric(
+                                horizontal: 85.0, vertical: 10.0),
+                          ),
+                          shape: MaterialStateProperty.all(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
